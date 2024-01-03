@@ -166,7 +166,8 @@ class AdCampaingGameMetricDAL():
         query = select(AdCampaingGameMetric).\
             join(AdCampaing, AdCampaing.adcampaing_id == AdCampaingGameMetric.adcampaing_id).\
             options(joinedload(AdCampaingGameMetric.campaing_link)).\
-            filter(AdCampaingGameMetric.game_id == game_id)
+            filter(AdCampaingGameMetric.game_id == game_id).\
+            where(AdCampaing.is_active == 1)
         res = await self.db_session.execute(query)
         campaing_row = res.fetchall()
         campaings = [row[0] for row in campaing_row]

@@ -213,8 +213,10 @@ async def _add_game_in_campaing(campaing_id: int, user_id: int, game_id: int, se
 async def _get_campaing_url(game_id: int, endpoint_name: str, session) -> Union[str, None]:
     adcampaingmetric_dal = AdCampaingGameMetricDAL(session)
     adcampaings = await adcampaingmetric_dal.get_campaings_by_game_id(game_id)
-    target_campaing = randint(1, len(adcampaings))
-    campaing_url = f"{settings.BASE_WEB_ADDESS}/{endpoint_name}/{target_campaing}/run"
+    campaing_url = ""
+    if len(adcampaings) != 0:
+        target_campaing = randint(1, len(adcampaings))
+        campaing_url = f"{settings.BASE_WEB_ADDESS}/{endpoint_name}/{target_campaing}/run"
     return campaing_url
 
 

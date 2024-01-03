@@ -129,4 +129,6 @@ async def get_campaign_by_id(id: int, db: AsyncSession = Depends(get_db)) -> AdC
 @campaing_router.get("/url/{game_id}", response_model=CampaignURL)
 async def get_campaign_url(game_id: int, db: AsyncSession = Depends(get_db)) -> Union[CampaignURL, None]:
     campaing_url = await _get_campaing_url(game_id, "campaigns", db)
+    if campaing_url == "":
+        raise HTTPException(status_code=422, detail="Campaign for request game not found")
     return CampaignURL(url=campaing_url)
