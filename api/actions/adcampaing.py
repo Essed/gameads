@@ -4,11 +4,13 @@ from api.models import AppCard
 from api.models import Metric
 from db.dals import AdCampaingDAL
 from db.dals import AdCampaingGameMetricDAL
+from db.models import AdCampaingGameMetric
 from datetime import datetime
 from typing import Union, List
 from random import uniform
+from random import randint
 
-from db.models import AdCampaingGameMetric
+import settings
 
 async def _create_new_adcampaing(body: AdCampaingCreate, content_path: str, user_id: int, session) -> AdCampaingUI:    
     async with session.begin():
@@ -39,7 +41,20 @@ async def _get_campaings_user_own(user_id: int, session) -> Union[List[AdCapamai
         return AdCapamaingsUI(
             campaings=adcampaings
         )
-    
+
+async def _get_campaing_by_id(campaing_id: int, session) -> Union[AdCampaingUI, None]:
+    async with session.begin():
+        adcampaing_dal = AdCampaingDAL(session)
+        adcampaing = await adcampaing_dal.get_campaing_by_id(campaing_id)
+        return AdCampaingUI(
+            adcampaing_id=adcampaing.adcampaing_id,
+            name = adcampaing.name,
+            budget=adcampaing.budget,
+            message=adcampaing.message,
+            content_path=adcampaing.content_path
+        )
+
+
 async def _get_games_campaings_own(user_id: int, session) -> Union[List[AdCampaings], None]:
     async with session.begin(): 
         adcampaingmetric_dal = AdCampaingGameMetricDAL(session)
@@ -193,7 +208,14 @@ async def _add_game_in_campaing(campaing_id: int, user_id: int, game_id: int, se
         cpa = round(uniform(10.0, 200.0), 2),
     )
     return await adcampaing_dal.create_game_in_campaing(campaing_id, game_id, user_id, metrics_model)
-    
+
+
+async def _get_campaing_url(game_id: int, endpoint_name: str, session) -> Union[str, None]:
+    adcampaingmetric_dal = AdCampaingGameMetricDAL(session)
+    adcampaings = await adcampaingmetric_dal.get_campaings_by_game_id(game_id)
+    target_campaing = randint(1, len(adcampaings))
+    campaing_url = f"{settings.BASE_WEB_ADDESS}/{endpoint_name}/{target_campaing}/run"
+    return campaing_url
 
 
 async def _remove_game_from_campaing(campaing_id: int, user_id: int, game_id: int, session) -> None:

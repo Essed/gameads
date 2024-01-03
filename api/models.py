@@ -155,3 +155,10 @@ class Token(BaseModel):
 
 class UploadedFileResonse(TunedModel):
     img_url: str
+
+
+class CampaignGameRequest(TunedModel):
+    id: int
+
+class CampaignURL(TunedModel):
+    url: str

@@ -10,6 +10,8 @@ from api.actions.adcampaing import _add_game_in_campaing
 from api.actions.adcampaing import _remove_game_from_campaing
 from api.actions.adcampaing import _exists_game_in_campaing
 from api.actions.adcampaing import _update_game_in_campaing
+from api.actions.adcampaing import _get_campaing_by_id
+from api.actions.adcampaing import _get_campaing_url
 from api.actions.auth import get_current_user_from_token
 
 
@@ -116,3 +118,15 @@ async def remove_campaign_with_game(body: CampaingGameRequest, db: AsyncSession 
     )
     return EmptyResponse(status_code="OK")
 
+@campaing_router.get("/{id}", response_model=AdCampaingUI)
+async def get_campaign_by_id(id: int, db: AsyncSession = Depends(get_db)) -> AdCampaingUI:
+    campaign = await _get_campaing_by_id(id, db)
+    if campaign is None:
+        raise HTTPException(status_code=422, detail=f"Campaign with {id} not found")
+    return campaign
+
+
+@campaing_router.get("/url/{game_id}", response_model=CampaignURL)
+async def get_campaign_url(game_id: int, db: AsyncSession = Depends(get_db)) -> Union[CampaignURL, None]:
+    campaing_url = await _get_campaing_url(game_id, "campaigns", db)
+    return CampaignURL(url=campaing_url)
