@@ -108,6 +108,8 @@ class AdCampaingDAL():
         if campaing_id_row is not None:
             return campaing_id_row[0]
 
+
+
     async def update_campaing_by_id(self, user_id: int, campaing_id: int, status: bool) -> Union[bool, None]:
         query = update(AdCampaing).\
             where(and_(AdCampaing.adcampaing_id == campaing_id, AdCampaing.user_id == user_id)).\
@@ -149,6 +151,28 @@ class AdCampaingGameMetricDAL():
         self.db_session.add(new_game_campaing)  
         await self.db_session.flush()
         await self.db_session.commit()
+
+    async def get_campaing_by_game_id(self, game_id: int) -> Union[AdCampaingGameMetric, None]:
+        query = select(AdCampaingGameMetric).\
+            join(AdCampaing, AdCampaing.adcampaing_id == AdCampaingGameMetric.adcampaing_id).\
+            options(joinedload(AdCampaingGameMetric.campaing_link)).\
+            filter(AdCampaingGameMetric.game_id == game_id)
+        res = await self.db_session.execute(query)
+        campaing_row = res.fetchone()
+        if campaing_row is not None:
+            return campaing_row[0]
+
+    async def get_campaings_by_game_id(self, game_id: int) -> Union[AdCampaingGameMetric, None]:
+        query = select(AdCampaingGameMetric).\
+            join(AdCampaing, AdCampaing.adcampaing_id == AdCampaingGameMetric.adcampaing_id).\
+            options(joinedload(AdCampaingGameMetric.campaing_link)).\
+            filter(AdCampaingGameMetric.game_id == game_id)
+        res = await self.db_session.execute(query)
+        campaing_row = res.fetchall()
+        campaings = [row[0] for row in campaing_row]
+        if campaings is not None:
+            return campaings
+
 
     async def delete_game_from_campaing(self, campaing_id: int, user_id: int, game_id: int) -> None:
         query = delete(AdCampaingGameMetric).\
