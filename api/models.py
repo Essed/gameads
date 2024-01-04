@@ -49,9 +49,9 @@ class EmptyResponse(TunedModel):
 
 class AdCampaingCreate(BaseModel):
     name: str
-    message: str
+    message: Optional[str] = Field(None,)
     budget: float
-    content_path: str
+    content_path: Optional[str] = Field(None,)
 
     @field_validator("name")
     def validate_name(cls, value):
@@ -69,9 +69,9 @@ class AdCampaingBase(TunedModel):
 class AdCampaingUI(TunedModel):
     adcampaing_id: int
     name: str
-    message: str
+    message: Optional[str] = Field(None,)
     budget: float
-    content_path: str
+    content_path: Optional[str] = Field(None,)
 
 
 class AdCampaingUserUI(TunedModel):
@@ -110,8 +110,8 @@ class Metric(TunedModel):
 class AdCampaing(TunedModel):
     id: int
     title: str
-    img_url: str
-    description: str
+    img_url: Optional[str] = Field(None,)
+    description: Optional[str] = Field(None,)
     is_runned: bool
     appcard: List[AppCard]
 

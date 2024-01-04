@@ -85,8 +85,8 @@ class AdCampaing(Base):
 
     adcampaing_id: int = Column(Integer, primary_key=True)
     name: str = Column(String, nullable=False)
-    content_path: str = Column(String, nullable=False)
-    message: str = Column(String, nullable=False)
+    content_path: str = Column(String, nullable=True)
+    message: str = Column(String, nullable=True)
     created_at: DateTime = Column(DateTime, nullable=False)
     user_id: int = Column(Integer, ForeignKey("user.user_id"))
     budget: float = Column(Float, nullable=False)
