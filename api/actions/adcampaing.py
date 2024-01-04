@@ -226,4 +226,4 @@ async def _remove_game_from_campaing(campaing_id: int, user_id: int, game_id: in
 
 async def _exists_game_in_campaing(campain_id: int, user_id: int, game_id: int, session) -> Union[bool, None]:
     adcampainggamemetric_dal = AdCampaingGameMetricDAL(session)
-    return await adcampainggamemetric_dal.exist_game_in_campain(campain_id, game_id, user_id)
+    return await adcampainggamemetric_dal.exist_game_in_campaing(campain_id, game_id, user_id)

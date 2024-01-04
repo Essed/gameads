@@ -167,7 +167,7 @@ class AdCampaingGameMetricDAL():
             join(AdCampaing, AdCampaing.adcampaing_id == AdCampaingGameMetric.adcampaing_id).\
             options(joinedload(AdCampaingGameMetric.campaing_link)).\
             filter(AdCampaingGameMetric.game_id == game_id).\
-            where(AdCampaing.is_active == 1)
+            where()
         res = await self.db_session.execute(query)
         campaing_row = res.fetchall()
         campaings = [row[0] for row in campaing_row]
@@ -185,7 +185,7 @@ class AdCampaingGameMetricDAL():
         await self.db_session.execute(query) 
         await self.db_session.commit()
 
-    async def exist_game_in_campain(self, campaing_id: int, game_id: int, user_id: int) -> Union[bool, None]:
+    async def exist_game_in_campaing(self, campaing_id: int, game_id: int, user_id: int) -> Union[bool, None]:
         query = select(AdCampaingGameMetric).where(
                     exists().where(
                             and_(AdCampaingGameMetric.adcampaing_id == campaing_id,

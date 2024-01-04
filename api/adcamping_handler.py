@@ -21,8 +21,6 @@ campaing_router = APIRouter()
 @campaing_router.post("/", response_model=AdCampaingUI)
 async def create_campaign(body: AdCampaingCreate, db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user_from_token)) -> AdCampaingUI:
     try:
-        if body.content_path is None:
-            body.content_path = ""        
         created_campaign = await _create_new_adcampaing(body, body.content_path, current_user.user_id, db)
         await _add_game_in_campaing(created_campaign.adcampaing_id, current_user.user_id, None, db)
         return created_campaign
@@ -93,7 +91,6 @@ async def update_game_in_campaign(id: int, body: UpdateCompaingRequest, db: Asyn
 async def create_campaign_with_game(body: CampaingGameRequest, db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user_from_token)) -> AdCampaingGameMetric:
     
     exists_status = await  _exists_game_in_campaing(body.campaing_id, current_user.user_id, body.app_id, db)
-   
     
     if exists_status is not None:
         raise HTTPException(status_code=422, detail=f"Game with id {body.app_id} added to campaing with id {body.campaing_id} yet")
