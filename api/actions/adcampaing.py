@@ -29,8 +29,8 @@ async def _create_new_adcampaing(body: AdCampaingCreate, content_path: str, user
             message=adcampaing.message,
             budget=adcampaing.budget,
             user_id=adcampaing.user_id,
-            content_path=adcampaing.content_path
-            
+            content_path=adcampaing.content_path,
+            created_at=adcampaing.created_at            
         )
 
 
