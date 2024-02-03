@@ -47,7 +47,7 @@ async def _get_campaing_by_id(campaing_id: int, session) -> Union[AdCampaingUI, 
         adcampaing_dal = AdCampaingDAL(session)
         adcampaing = await adcampaing_dal.get_campaing_by_id(campaing_id)
         return AdCampaingUI(
-            adcampaing_id=adcampaing.adcampaing_id,
+            adcampaing_id=adcampaing.adcam,
             name = adcampaing.name,
             budget=adcampaing.budget,
             message=adcampaing.message,

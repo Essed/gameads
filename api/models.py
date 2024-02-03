@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import EmailStr, field_validator, Field
 from pydantic import BaseModel
 from typing import Optional, List
@@ -72,6 +73,7 @@ class AdCampaingUI(TunedModel):
     message: Optional[str] = Field(None,)
     budget: float
     content_path: Optional[str] = Field(None,)
+    created_at: datetime
 
 
 class AdCampaingUserUI(TunedModel):
